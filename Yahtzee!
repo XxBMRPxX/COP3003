@@ -1,0 +1,98 @@
+// File: Yahtzee.cpp
+// Dev: Michael Hierrezuelo
+// Organization: FGCU COP 3003
+// Description: The Main Application File For A Console Yahtzee Game!
+// --------------------------------------------------------------------
+
+#include <iostream>
+#include <cstdlib>      /* std::srand(), std::rand() */
+#include <ctime>        /* std::time() */
+
+// Constants & Types
+// --------------------------------------------------------------------
+
+const int DICE_COUNT = 5;
+const int ROUND_COUNT = 13;
+const int ROLLS_COUNT = 3;
+
+struct Dice {
+    int value;
+    bool held;
+};
+
+struct Round {
+    Dice dice[DICE_COUNT];
+};
+
+// Function Prototypes
+// --------------------------------------------------------------------
+
+// Function Definitions
+// --------------------------------------------------------------------
+
+int main()
+{
+    // [Rounds: 13]
+    // [Rolls: 3]
+    // [Dice: 5]
+    // [Scores: ?]
+
+    bool again;
+
+    /* Initialize Random Seed */
+    std::srand (std::time(NULL));
+
+    do
+    {
+
+        Round rounds[ROUND_COUNT]{0}; // Zero's The Entire 13 Rounds * (5 Dice * 5 value/held) Bytes
+
+        for (int round = 0; round < ROUND_COUNT; ++round)
+        {
+            int roll{0};
+
+             do
+             {
+
+                 for (int die = 0; die < DICE_COUNT; ++die)
+                 {
+
+                     if (!rounds[round].dice[die].held) // if NOT Held
+                     {
+                         rounds[round].dice[die].value = std::rand() % 6 + 1; // Random Value From 1-5 (Dice)
+                     }
+
+                     std::cout << rounds[round].dice[die].value
+                               << (rounds[round].dice[die].held ? '*' : ' ') // ? (If true), Then '*' : Else ' '
+                               << ' ';
+                 } //Dice (if loop)
+
+                 std::cout << std::endl;
+
+                 for (int die = 0; die < DICE_COUNT; ++die)
+                 {
+
+                     if (!rounds[round].dice[die].held) // if NOT Held
+                     {
+                         std::cout << "Hold Die " << (die + 1) << "? ";
+                         std::cin >> ask;
+                         rounds[round].dice[die].held = (ask == 'Y' || ask == 'y');
+                     }
+                 } //Dice (if loop)
+
+                 ++roll;
+
+             } while(roll < ROLLS_COUNT);
+        } // Rounds (for Loop)
+
+        std::cout << "Play Again? ";
+        char ask;
+        std::cin >> ask; // Y or y = Yes; N or n = No;
+        again = (ask == 'Y' || ask == 'y'); // Could Be In The while(Condition Statement);
+
+    } while(again); // No Need To Assign "again == true" (Default)
+
+
+    return (0);
+
+} // End Main
